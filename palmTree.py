@@ -5,22 +5,27 @@ import numpy as np
 
 class palmTree():
     def __init__(self):
-        numFronds = 5
+        self.numFronds = 5
+
+        self.palmCenter = 1
+        self.leaf_length = 11
+        self.resolution = 0.01
+
+        self.leafCurve = 10
+
         pass
 
-    def createLeaf():
-        palmCenter = 1
+    def createHead():
         
+        pass
 
+    def createLeaf(self, ):
         # =====
         # Leaf Spine
         # =====
-        leaf_length = 11
-        resolution = 0.01
-        leafCurve = 10
 
-        x1 = np.arange(palmCenter, leaf_length, resolution)
-        y1 = np.log10(x1) * leafCurve
+        x1 = np.arange(self.palmCenter, self.leaf_length, self.resolution)
+        y1 = np.log10(x1) * self.leafCurve
 
         y1 = x1
         z = 1
@@ -38,13 +43,13 @@ class palmTree():
         axis2 = np.cos(theta)
 
         # === Shape of lower half ===
-        width = np.arange(-(leaf_length - 1)/2, (leaf_length - 1)/2, resolution)
+        width = np.arange(-(self.leaf_length - 1)/2, (self.leaf_length - 1)/2, self.resolution)
         width = width * width * -0.125 + 4
         x2 = axis2 * width + x1
         y2 = axis1 * width + y1
 
         # === Shape of higher half ===
-        width = np.arange(-(leaf_length - 1)/2, (leaf_length - 1)/2, resolution)
+        width = np.arange(-(self.leaf_length - 1)/2, (self.leaf_length - 1)/2, self.resolution)
         width = width * width * 0.125 - 4
         x3 = axis2 * width + x1
         y3 = axis1 * width + y1
@@ -54,7 +59,7 @@ class palmTree():
         # Create Leaves
         # ====
         numLeavesPerSpine = 30
-        current_numLeavesPerSpine = (leaf_length - palmCenter)/resolution
+        current_numLeavesPerSpine = (self.leaf_length - self.palmCenter)/self.resolution
         everyOther = int(current_numLeavesPerSpine/numLeavesPerSpine)
 
         def makePointPairs(x, y, other):

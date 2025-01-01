@@ -7,8 +7,10 @@ import numpy as np
 
 import palmTree as pt
 
+myTree = pt.palmTree()
+x1, y1, half_lines1, half_lines2 = myTree.createLeaf()
 
-
+fig, ax = plt.subplots(figsize=(5, 5))
 
 line_collection1 = LineCollection(half_lines1, linewidths=1, color='green')
 line_collection2 = LineCollection(half_lines2, linewidths=1, color='green')
