@@ -12,21 +12,42 @@ class palmTree():
         self.leaf_length = 11
         self.resolution = 0.01
 
+        self.splits = (self.leaf_length - self.palmCenter) / self.resolution
+
         self.leaf_end_x = 10
         self.leafCurve = 4
 
-        self.spines = np.empty([self.numFronds, int((self.leaf_length - self.palmCenter) / self.resolution)])
+        # ==== ====
+        # createHead
+        # ==== ====
+        self.spines = np.empty([self.numFronds, int((self.leaf_length - self.palmCenter) / self.resolution) - 1])
 
         self.leaves = np.empty([self.numFronds, 2, self.numLeavesPerSpine])
 
-
-
     def createHead(self):
-        for i in self.numFronds():
-            x1, y1, half_lines1, half_lines2, points1 = self.createLeaf()
-            # self.spines[i] = 
+        angles = np.arange(20, (self.numFronds + 1) * 20, 20)
+        angles = self.myAngle(angles)
+        
 
+        for i in range(self.numFronds):
+            angle = angles[i]
+            
+            rotationMAT = np.array([[np.cos(angle), -np.sin(angle)], 
+                                    [np.sin(angle), np.cos(angle)]])
+            rotationMAT = np.repeat(
+                 rotationMAT[np.newaxis, :, :],
+                 self.numLeavesPerSpine - 1, 
+                 axis=0)
+            
+            x1, y1, half_lines1, half_lines2, spine_lines = self.createLeaf()
+            print()
+            self.spines[i] = np.matmul(rotationMAT, spine_lines)
+            self.leaves[i, 0] = np.matmul(rotationMAT, half_lines1)
+            self.leaves[i, 1] = np.matmul(rotationMAT, half_lines2)
         pass
+
+    def myAngle(self, degree):
+            return (np.pi / 180) * degree
 
     def createLeaf(self, ):
         # =====
@@ -45,8 +66,7 @@ class palmTree():
         z = -1 * np.reciprocal(z) 
         
         
-        def myAngle(degree):
-            return (np.pi / 180) * degree
+        
 
         # =====
         # Leaf Length
@@ -58,7 +78,7 @@ class palmTree():
         intersect = int(3.5 / 3.25)
         numPoints = int(((self.leaf_length - self.palmCenter) / self.resolution) * intersect / (self.leaf_length - self.palmCenter)) + 1
 
-        leafAngle = myAngle(45)
+        leafAngle = self.myAngle(45)
 
         # ====
         # Half 1
